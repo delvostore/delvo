@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>تطبيق المتجر</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#FFA500">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="/pwa/pwa-192x192.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/pwa/pwa-192x192.png">
+</head>
+<body>
+
+    <div class="page-container active" id="homePage">
+        <div class="search-bar">
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="ابحث عن منتجاتك المفضلة">
+                <ul id="suggestionsList" class="search-suggestions"></ul>
+            </div>
+        </div>
+
+        <div class="categories-rounded">
+            <div class="category" onclick="showCategory('snacks')">
+                <div class="icon" style="background-color: #FFA500;">
+                    <i class="fas fa-burger"></i>
+                </div>
+                <span>سناكات</span>
+            </div>
+            <div class="category" onclick="showCategory('vegetables_fruits')">
+                <div class="icon" style="background-color: #3cb371;">
+                    <i class="fas fa-carrot"></i>
+                </div>
+                <span>خضروات و فواكه</span>
+            </div>
+            <div class="category" onclick="showCategory('legumes')">
+                <div class="icon" style="background-color: #007bff;">
+                    <i class="fas fa-seedling"></i>
+                </div>
+                <span>بقوليات</span>
+            </div>
+            <div class="category" onclick="showCategory('groceries')">
+                <div class="icon" style="background-color: #e91e63;">
+                    <i class="fas fa-shopping-basket"></i>
+                </div>
+                <span>غذائيات</span>
+            </div>
+        </div>
+
+        <div class="food-section">
+            <div class="food-header">
+                <h3>سناكات</h3>
+                <a href="#" onclick="showCategory('snacks')">عرض الكل</a>
+            </div>
+            <div class="food-grid" id="snacksGrid"></div>
+        </div>
+
+        <div class="food-section">
+            <div class="food-header">
+                <h3>خضروات وفواكه</h3>
+                <a href="#" onclick="showCategory('vegetables_fruits')">عرض الكل</a>
+            </div>
+            <div class="food-grid" id="vegetables_fruitsGrid"></div>
+        </div>
+
+        <div class="food-section">
+            <div class="food-header">
+                <h3>بقوليات</h3>
+                <a href="#" onclick="showCategory('legumes')">عرض الكل</a>
+            </div>
+            <div class="food-grid" id="legumesGrid"></div>
+        </div>
+
+        <div class="food-section">
+            <div class="food-header">
+                <h3>غذائيات</h3>
+                <a href="#" onclick="showCategory('groceries')">عرض الكل</a>
+            </div>
+            <div class="food-grid" id="groceriesGrid"></div>
+        </div>
+    </div>
+
+    <div class="page-container" id="cartPage">
+        <div class="header-with-back">
+            <span class="back-arrow"><i class="fas fa-arrow-right"></i></span>
+            <h2>سلة التسوق</h2>
+        </div>
+        <div class="cart-content" id="cartItems"></div>
+        <div class="cart-card">
+            <a href="#" class="add-more" id="addMoreBtn">
+                <i class="fas fa-plus-circle"></i>
+                <span>أضف المزيد من المنتجات</span>
+            </a>
+            <div class="notes-card" id="notesBtn">
+                <i class="fas fa-notes-medical"></i>
+                <span>ملاحظات إضافية على الطلب</span>
+            </div>
+            <div class="notes-container" id="notesContainer">
+                <textarea id="notesInput" placeholder="اكتب ملاحظاتك هنا..."></textarea>
+                <button id="saveNotesBtn">حفظ الملاحظات</button>
+            </div>
+        </div>
+        <div class="delivery-section">
+            <h3>تفاصيل التوصيل</h3>
+            <div class="area-select-container">
+                <div class="selected-area" id="selectedArea">
+                    <i class="fas fa-chevron-down"></i>
+                    <span id="areaName"></span>
+                </div>
+            </div>
+        </div>
+        <div class="promo-section">
+            <h3>كود الخصم</h3>
+            <div class="promo-code-input">
+                <input type="text" id="promoCodeInput" placeholder="أدخل كود الخصم">
+                <button id="applyPromoBtn">تطبيق</button>
+            </div>
+            <p id="promoMessage" class="promo-code-message"></p>
+        </div>
+        <div class="payment-method">
+            <h3>طريقة الدفع</h3>
+            <div class="payment-card">
+                <img src="https://i.imgur.com/gK9qQ4j.png">
+                <span>كاش</span>
+            </div>
+        </div>
+        <div class="order-summary">
+            <h3>ملخص الطلب</h3>
+            <div class="summary-row">
+                <span>المبلغ الإجمالي</span>
+                <span id="subtotal">0 ل.س</span>
+            </div>
+            <div class="summary-row delivery-fee">
+                <span>أجرة التوصيل</span>
+                <span id="deliveryFee">0 ل.س</span>
+            </div>
+            <hr>
+            <div class="summary-row final-total">
+                <span>المجموع النهائي</span>
+                <span id="total">0 ل.س</span>
+            </div>
+        </div>
+        <div class="checkout-container">
+            <button class="checkout-btn">
+                <span>أطلب الآن</span>
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+
+    <div class="page-container" id="favoritesPage">
+        <div class="header-with-back">
+            <span class="back-arrow"><i class="fas fa-arrow-right"></i></span>
+            <h2>المفضلة</h2>
+        </div>
+        <div class="food-grid" id="favoritesGrid"></div>
+    </div>
+
+    <div class="page-container" id="notificationsPage">
+        <div class="header-with-back">
+            <span class="back-arrow"><i class="fas fa-arrow-right"></i></span>
+            <h2>الإشعارات</h2>
+        </div>
+        <div class="notifications-card fade-in-card">
+            <div class="notification-item">
+                <h4>مرحباً بعودتك!</h4>
+                <p>يسعدنا وجودك معنا من جديد، تصفح منتجاتنا الطازجة واستفد من عروضنا.</p>
+            </div>
+            <div class="notification-item">
+                <h4>منتجات جديدة!</h4>
+                <p>تم إضافة منتجات جديدة إلى قسم الخضروات والفواكه، اكتشفها الآن.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-container" id="settingsPage">
+        <div class="header-with-back">
+            <span class="back-arrow"><i class="fas fa-arrow-right"></i></span>
+            <h2>الإعدادات</h2>
+        </div>
+        <div class="setting-card fade-in-card">
+            <h2>إعدادات عامة</h2>
+            <div class="setting-item">
+                <span>الوضع الليلي</span>
+                <label class="switch">
+                    <input type="checkbox" id="modeBtn">
+                    <span class="slider">
+                        <i class="fas fa-sun sun"></i>
+                        <i class="fas fa-moon moon"></i>
+                    </span>
+                </label>
+            </div>
+        </div>
+
+        <div class="setting-card fade-in-card">
+            <h2>مساعدة</h2>
+            <div class="faq-item">
+                <span>الأسئلة الشائعة</span>
+                <i class="fas fa-chevron-down arrow"></i>
+            </div>
+            <div class="popup" id="faqPopup">
+                <p><b>كيف يمكنني الطلب؟</b></p>
+                <p>بعد إضافة المنتجات إلى السلة، انقر على زر "أطلب الآن" ليتم تحويلك إلى واتساب لإتمام الطلب.</p>
+            </div>
+            <div class="contact-icons">
+                <a href="#" class="phone-link"><i class="fas fa-phone"></i></a>
+                <a href="#" class="whatsapp-link"><i class="fab fa-whatsapp"></i></a>
+            </div>
+            <a href="#" class="policy-link" data-policy="privacy">
+                <i class="fas fa-user-lock"></i>
+                <span>سياسة الخصوصية</span>
+            </a>
+            <a href="#" class="policy-link" data-policy="terms">
+                <i class="fas fa-file-alt"></i>
+                <span>الشروط والأحكام</span>
+            </a>
+        </div>
+    </div>
+
+    <div class="product-modal-overlay" id="productModal">
+        <div class="product-modal-content">
+            <span class="product-modal-close">×</span>
+            <img class="product-modal-image" id="productModalImage" src="">
+            <h3 class="product-modal-title" id="productModalTitle"></h3>
+            <p class="product-modal-description" id="productModalDescription"></p>
+            <span class="product-modal-price" id="productModalPrice"></span>
+            <div class="product-modal-quantity">
+                <button id="modalAddBtn">+</button>
+                <span id="modalQuantity">1</span>
+                <button id="modalSubtractBtn">-</button>
+            </div>
+            <button class="product-modal-add-btn" id="modalAddToCartBtn">أضف إلى السلة</button>
+        </div>
+    </div>
+
+    <div class="area-modal-overlay" id="areaModal">
+        <div class="area-modal-content">
+            <span class="modal-close">×</span>
+            <h3>اختر منطقتك</h3>
+            <ul class="area-list" id="areaList"></ul>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-content" id="modalContent">
+            <span class="modal-close">×</span>
+            <h2 id="modalTitle"></h2>
+            <p id="modalText"></p>
+        </div>
+    </div>
+
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner"></div>
+    </div>
+
+    <div class="toast-message" id="toastMessage">
+        <i class="fas fa-check-circle"></i>
+        <span></span>
+    </div>
+
+    <div class="floating-cart" id="floatingCart">
+        <i class="fas fa-shopping-cart cart-icon"></i>
+        <span class="cart-count" id="floatingCartCount">0</span>
+    </div>
+
+    <div class="bottom-nav">
+        <a href="#" class="nav-item active" data-target="home">
+            <i class="fas fa-home"></i>
+            <span>الرئيسية</span>
+        </a>
+        <a href="#" class="nav-item" data-target="favorites">
+            <i class="far fa-heart"></i>
+            <span>المفضلة</span>
+        </a>
+        <a href="#" class="nav-item" data-target="notifications">
+            <i class="fas fa-bell"></i>
+            <span>الإشعارات</span>
+        </a>
+        <a href="#" class="nav-item" data-target="settings">
+            <i class="fas fa-cog"></i>
+            <span>الإعدادات</span>
+        </a>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js').then(registration => {
+                    console.log('Service Worker registered with scope:', registration.scope);
+                }).catch(err => {
+                    console.log('Service Worker registration failed:', err);
+                });
+            });
+        }
+    </script>
+</body>
+</html>
