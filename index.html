@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jablah Delivery</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lykmapipo/themify-icons@0.1.2/css/themify-icons.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="toast-message" id="toastMessage">
+        <i class="fas fa-check-circle"></i>
+        <span>تمت إضافة المنتج إلى السلة!</span>
+    </div>
+
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="spinner"></div>
+    </div>
+
+    <div class="search-bar">
+        <div class="search-container">
+            <input id="searchInput" type="text" placeholder="الطعام، المشروبات، المطاعم، إلخ...">
+            <ul id="suggestionsList" class="search-suggestions"></ul>
+        </div>
+    </div>
+
+    <div class="slider-container">
+        <div class="slider-wrapper">
+            <img src="https://i.imgur.com/IQBlQwH.png" alt="Slide 1">
+            <img src="https://i.imgur.com/hR6XZSC.png" alt="Slide 2">
+        </div>
+        <div class="slider-dots">
+            <span class="dot active"></span>
+            <span class="dot"></span>
+        </div>
+    </div>
+
+    <div class="categories-rounded">
+        <div class="category" onclick="showCategory('snacks')">
+            <i class="fas fa-cookie-bite icon" style="background-color: #FFA726;"></i>
+            <span>سناكات</span>
+        </div>
+        <div class="category" onclick="showCategory('vegetables_fruits')">
+            <i class="fas fa-carrot icon" style="background-color: #66BB6A;"></i>
+            <span>خضروات <br>و فواكه</span>
+        </div>
+        <div class="category" onclick="showCategory('legumes')">
+            <i class="fas fa-leaf icon" style="background-color: #BA68C8;"></i>
+            <span>بقوليات</span>
+        </div>
+        <div class="category" onclick="showCategory('groceries')">
+            <i class="fas fa-cheese icon" style="background-color: #2196F3;"></i>
+            <span>غذائيات</span>
+        </div>
+    </div>
+
+    <div class="fast-food-card" onclick="showCategory('fast_food')">
+        <div class="fast-food-card-image">
+            <img src="https://i.imgur.com/u19c4m5.png" alt="Fast Food">
+            <div class="fast-food-promo">
+                توصيل مجاني مع كود لذيذ
+            </div>
+        </div>
+        <div class="fast-food-card-details">
+            <div class="fast-food-card-title">
+                الوجبات السريعة
+            </div>
+            <div class="fast-food-card-subtitle">
+                ساندويش | برجر
+            </div>
+            <div class="fast-food-delivery-info">
+                <div class="delivery-time">
+                    <i class="fas fa-clock"></i>
+                    <span>44</span>
+                </div>
+                <div class="delivery-type">
+                    <i class="fas fa-motorcycle"></i>
+                    <span>توصيل سريع</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="bottom-nav">
+        <a href="#" class="nav-item active" data-target="home"><i class="ti-home"></i>الرئيسية</a>
+        <a href="#" class="nav-item" data-target="favorites"><i class="ti-heart"></i>المفضلة</a>
+        <a href="#" class="nav-item" data-target="notifications"><i class="ti-bell"></i>التنبيهات</a>
+        <a href="#" class="nav-item" data-target="cart"><i class="ti-shopping-cart"></i>السلة</a>
+        <a href="#" class="nav-item" data-target="settings"><i class="ti-settings"></i>الإعدادات</a>
+    </div>
+
+    <div id="snacksPage" class="page-container">
+        <div class="header-with-back">
+            <span class="back-arrow"><i class="fas fa-arrow-left"></i></span>
+            <h2>سناكات</h2>
+            <span></span>
+        </div>
+        <div class="food-section">
+            <div class="food-grid" id="snacksGrid"></div>
+        </div>
+    </div>
+
+    <div id="vegetables_fruitsPage" class="page-container">
+        <div class="header-with-back">
+            <span class="back-arrow"><i class="fas fa-arrow-left"></i></span>
+            <h2>خضروات و فواكه</h2>
+            <span></span>
+        </div>
+        <div class="food-section">
+            <div class="food-grid" id="vegetables_fruitsGrid"></div>
+        </div>
+    </div>
+
+    <div id="legumesPage" class="page-container">
+        <div class="header-with-back">
+            <span class="back-arrow"><i class="fas fa-arrow-left"></i></span>
+            <h2>بقوليات</h2>
+            <span></span>
+        </div>
+        <div class="food-section">
+            <div class="food-grid" id="legumesGrid"></div>
+        </div>
+    </div>
+
+    <div id="groceriesPage" class="page-container">
+        <div class="header-with-back">
+            <span class="back-arrow"><i class="fas fa-arrow-left"></i></span>
+            <h2>غذائيات</h2>
+            <span></span>
+        </div>
+        <div class="food-section">
+            <div class="food-grid" id="groceriesGrid"></div>
+        </div>
+    </div>
+
+    <div id="fast_foodPage" class="page-container">
+        <div class="header-with-back">
+            <span class="back-arrow"><i class="fas fa-arrow-left"></i></span>
+            <h2>الوجبات السريعة</h2>
+            <span></span>
+        </div>
+        <div class="food-section">
+            <div class="food-grid" id="fast_foodGrid"></div>
+        </div>
+    </div>
+
+    <div id="favoritesPage" class="page-container">
+        <div class="header-with-back">
+            <span class="back-arrow"><i class="fas fa-arrow-left"></i></span>
+            <h2>المفضلة</h2>
+            <span></span>
+        </div>
+        <div class="food-section">
+            <div class="food-grid" id="favoritesGrid">
+                <p style="text-align:center;">لا يوجد لديك منتجات مفضلة بعد.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="notificationsPage" class="page-container">
+        <div class="header-with-back">
+            <span class="back-arrow"><i class="fas fa-arrow-left"></i></span>
+            <h2>التنبيهات</h2>
+            <span></span>
+        </div>
+        <div class="notifications-card fade-in-card" style="animation-delay: 0s;">
+            <div class="notification-item">
+                <h4>تنبيه ٠</h4>
+                <p>أهلاً بكم في تطبيق Delvo !</p>
+                <p>هذا التطبيق يعمل على خدمتكم و توصيل ما تحتاجونه.</p>
+                <p>هذه النسخة التجريبية من التطبيق برقم الإصدار 1.0.</p>
+                <p>فريق تطوير Delvo Store</p>
+            </div>
+            <div class="notification-item">
+                <h4>ملاحظة هامة</h4>
+                <p>الأسعار قابلة للتغيير حسب سعر الصرف.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="settingsPage" class="page-container">
+        <div class="header-with-back">
+            <span class="back-arrow"><i class="fas fa-arrow-left"></i></span>
+            <h2>الإعدادات</h2>
+            <span></span>
+        </div>
+        <div class="setting-card fade-in-card" style="animation-delay: 0.1s;">
+            <h2>المظهر</h2>
+            <div class="setting-item">
+                <span>الوضع الليلي / النهاري</span>
+                <label class="switch">
+                    <input type="checkbox" id="modeBtn">
+                    <span class="slider">
+                        <i class="fas fa-sun sun"></i>
+                        <i class="fas fa-moon moon"></i>
+                    </span>
+                </label>
+            </div>
+        </div>
+        <div class="setting-card fade-in-card" style="animation-delay: 0.2s;">
+            <h2>المساعدة والدعم</h2>
+            <div class="contact-icons">
+                <a href="#" title="واتس اب"><i class="fab fa-whatsapp"></i></a>
+                <a href="#" title="فيسبوك"><i class="fab fa-facebook"></i></a>
+                <a href="#" title="انستغرام"><i class="fab fa-instagram"></i></a>
+                <a href="#" title="ايميل"><i class="fas fa-envelope"></i></a>
+            </div>
+            <div class="faq-item">
+                <span>الأسئلة الشائعة (FAQ)</span>
+                <i class="fas fa-chevron-down arrow"></i>
+                <div class="popup" id="faqPopup">
+                    <p>س1: كيف أستخدم التطبيق؟</p>
+                    <p>ج1: التسجيل ثم متابعة الأقسام.</p>
+                    <p>س2: كيف أغير اللغة؟</p>
+                    <p>ج2: من قسم اللغة اختر المطلوبة.</p>
+                </div>
+            </div>
+        </div>
+        <div class="setting-card fade-in-card" style="animation-delay: 0.3s;">
+            <h2>القوانين والسياسات</h2>
+            <a href="#" data-policy="privacy" class="policy-link">
+                <i class="fas fa-shield-alt"></i>
+                <span>سياسة الخصوصية</span>
+            </a>
+            <a href="#" data-policy="terms" class="policy-link">
+                <i class="fas fa-file-alt"></i>
+                <span>الشروط والأحكام</span>
+            </a>
+        </div>
+    </div>
+
+    <div id="cartPage" class="page-container">
+        <div class="header-with-back">
+            <span class="back-arrow"><i class="fas fa-arrow-left"></i></span>
+            <h2>سلتك</h2>
+            <span></span>
+        </div>
+        <div class="cart-content">
+            <div id="cartItems" class="items-list">
+                <p style="text-align:center;">السلة فارغة حالياً.</p>
+            </div>
+            <div class="add-more" id="addMoreBtn">
+                <i class="fas fa-plus"></i>
+                <span>إضافة المزيد</span>
+            </div>
+
+            <div class="notes-card" id="notesBtn">
+                <span>الملاحظات</span>
+                <i class="fas fa-edit"></i>
+            </div>
+            <div class="notes-container" id="notesContainer">
+                <textarea id="notesInput" placeholder="ملاحظات على الطعام (مثلاً: بدون بصل أو صوص إضافي)"></textarea>
+                <button id="saveNotesBtn">تم</button>
+            </div>
+            <div class="delivery-section">
+                <h3>المنطقة</h3>
+                <div class="area-select-container">
+                    <div class="selected-area" id="selectedArea">
+                        <span id="areaName"></span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="promo-section">
+                <h3>كود الخصم</h3>
+                <div class="promo-code-input">
+                    <input type="text" id="promoCodeInput" placeholder="أدخل كود الخصم">
+                    <button id="applyPromoBtn">تطبيق</button>
+                </div>
+                <div id="promoMessage" class="promo-code-message"></div>
+            </div>
+            <div class="payment-method">
+                <h3>طريقة الدفع</h3>
+                <div class="payment-card">
+                    <img src="https://i.imgur.com/eQyS1QW.png">
+                    <span>كاش</span>
+                </div>
+            </div>
+            <div class="order-summary">
+                <div class="summary-row">
+                    <span>المبلغ الإجمالي</span>
+                    <span id="subtotal">0 ل.س</span>
+                </div>
+                <div class="summary-row delivery-fee">
+                    <span>قيمة التوصيل</span>
+                    <span id="deliveryFee">12,000 ل.س</span>
+                </div>
+                <div class="summary-row hidden" id="discountRow">
+                    <span>الخصم</span>
+                    <span id="discountValue">0 ل.س</span>
+                </div>
+                <hr>
+                <div class="summary-row final-total">
+                    <span>المجموع النهائي</span>
+                    <span id="total">12,000 ل.س</span>
+                </div>
+            </div>
+        </div>
+        <div class="checkout-container">
+            <button class="checkout-btn">
+                <span>أرسل الطلب</span>
+                <span id="itemCount">0</span>
+                <span>الأصناف</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-content" id="modalContent">
+            <span class="modal-close">×</span>
+            <h3 id="modalTitle"></h3>
+            <p id="modalText"></p>
+        </div>
+    </div>
+
+    <div id="areaModal" class="area-modal-overlay">
+        <div class="area-modal-content">
+            <span class="modal-close" onclick="closeAreaModal()">×</span>
+            <h3>اختر المنطقة</h3>
+            <ul id="areaList" class="area-list"></ul>
+        </div>
+    </div>
+
+    <div id="productModal" class="product-modal-overlay">
+        <div class="product-modal-content">
+            <span class="product-modal-close">×</span>
+            <img id="productModalImage" class="product-modal-image">
+            <h3 id="productModalTitle" class="product-modal-title"></h3>
+            <p id="productModalDescription" class="product-modal-description"></p>
+            <div id="productModalPrice" class="product-modal-price"></div>
+            <div class="product-modal-quantity">
+                <button id="modalAddBtn">+</button>
+                <span id="modalQuantity">1</span>
+                <button id="modalSubtractBtn">-</button>
+            </div>
+            <button id="modalAddToCartBtn" class="product-modal-add-btn">أضف إلى السلة</button>
+        </div>
+    </div>
+
+    <div id="floatingCart" class="floating-cart">
+        <div class="cart-icon">
+            <i class="fas fa-shopping-basket"></i>
+        </div>
+        <span id="floatingCartCount" class="cart-count">0</span>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
