@@ -848,40 +848,42 @@ updateCartUI();
 
 
 
-document.addEventListener('DOMContentLoaded', (event) => {
+document.addEventListener('DOMContentLoaded', () => {
     const splashScreen = document.getElementById('splash-screen');
     const splashVideo = document.getElementById('splash-video');
     const mainContent = document.getElementById('main-content');
 
-    let videoLoaded = false;
-    let timerEnded = false;
+    let videoPlayed = false;
 
-    // تشغيل الفيديو وإخفاء السبلاش سكرين بمجرد أن يكون جاهزًا للتشغيل
+    // دالة لإخفاء السبلاش سكرين وإظهار المحتوى الرئيسي
+    function hideSplashScreen() {
+        splashScreen.style.display = 'none';
+        mainContent.style.display = 'block';
+        setTimeout(() => {
+            mainContent.style.opacity = '1';
+        }, 50);
+    }
+
+    // الانتظار حتى يصبح الفيديو جاهزًا للتشغيل بشكل كامل
     splashVideo.addEventListener('canplaythrough', () => {
-        if (!videoLoaded) {
-            videoLoaded = true;
-            splashVideo.play();
-            // إخفاء السبلاش سكرين بعد 5 ثواني من التشغيل
-            setTimeout(() => {
-                splashScreen.style.display = 'none';
-                mainContent.style.display = 'block';
-                setTimeout(() => {
-                    mainContent.style.opacity = '1';
-                }, 50);
-            }, 5000);
+        if (!videoPlayed) {
+            videoPlayed = true;
+            splashVideo.play().catch(error => {
+                // في حال فشل التشغيل التلقائي (على الآيفون غالباً)
+                console.error("Autoplay failed:", error);
+                hideSplashScreen();
+            });
+
+            // إخفاء السبلاش سكرين بعد 5 ثواني
+            setTimeout(hideSplashScreen, 5000);
         }
     });
 
-    // وضع حد أقصى للانتظار (10 ثواني مثلاً) حتى لو كان الإنترنت بطيئاً جداً
+    // وضع حد أقصى للانتظار (10 ثواني) عشان ما يمل المستخدم
     setTimeout(() => {
-        timerEnded = true;
-        if (!videoLoaded) {
-            // إذا لم يتم تحميل الفيديو خلال 10 ثواني، اخفِ السبلاش سكرين واظهر المحتوى مباشرة
-            splashScreen.style.display = 'none';
-            mainContent.style.display = 'block';
-            setTimeout(() => {
-                mainContent.style.opacity = '1';
-            }, 50);
+        if (!videoPlayed) {
+            console.warn("Video did not play within 10 seconds. Hiding splash screen.");
+            hideSplashScreen();
         }
-    }, 10000); // 10000ms = 10 ثواني
+    }, 10000);
 });
